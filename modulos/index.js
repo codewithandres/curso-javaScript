@@ -20,3 +20,12 @@ console.log(obtenerPost());
 import obtener from './exportDefaul.js';
 
 console.log(obtener());
+
+/*
+    EmtyImport - importa el codigo del archivo sin crear objetos no nada
+*/
+
+import './emptyEport.js'
+import { nombre } from './emptyEport.js';
+
+console.log(nombre);
