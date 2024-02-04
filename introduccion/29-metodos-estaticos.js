@@ -2,7 +2,7 @@
     los metodos eestaticos sirven para aceceder ha los metodos y propiedades de la clase sin nesecidad de instanciarla
 */
 
-class Usario {
+class Usuario {
     constructor(nombre, correo) {
         this.nombre = nombre;
         this.correo = correo;
