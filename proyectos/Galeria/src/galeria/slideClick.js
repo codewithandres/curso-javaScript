@@ -10,6 +10,7 @@ const slideClick = (e) => {
     const categoriaActiva = galeria.dataset.categoria;
 
     datos.fotos[categoriaActiva].map(foto => {
+
         if (foto.id === id) {
             ruta = foto.ruta;
             nombre = foto.nombre;
