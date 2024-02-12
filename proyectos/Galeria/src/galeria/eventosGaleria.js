@@ -12,4 +12,8 @@ galeria.addEventListener('click', e => {
 
     }
     console.log(e.target.dataset.id);
+
+    const lick = () => {
+
+    }
 });
