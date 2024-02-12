@@ -1,6 +1,6 @@
 'use strict';
 
-var dataFotos = {
+var datos = {
     fotos: {
         america: [
             {
@@ -431,7 +431,7 @@ var dataFotos = {
     },
 };
 
-const { fotos } = dataFotos;
+const { fotos } = datos;
 
 var dataCategorias = {
     categorias: [
@@ -499,11 +499,10 @@ contenedorCategorias.addEventListener('click', e => {
         document.body.style.overflow = 'hidden';
 
         const categotiaActiva = e.target.closest('a').dataset.categoria;
-        const fotos = dataFotos.fotos[categotiaActiva];
+        galeria$2.dataset.categoria = categotiaActiva;
+        const fotos = datos.fotos[categotiaActiva];
         const carusel = galeria$2.querySelector('.galeria__carousel-slides');
         const { id, nombre, ruta, descripcion } = fotos[0];
-
-        galeria$2.dataset.categoria = categotiaActiva;
 
         cargarImagen(id, nombre, ruta, descripcion);
 
@@ -513,7 +512,7 @@ contenedorCategorias.addEventListener('click', e => {
 
             const slide = `
             <a href="#" class="galeria__carousel-slide">
-                <img class="galeria__carousel-image" src="${foto.ruta}" data-id=${foto.id} alt="" />
+                <img class="galeria__carousel-image" src="${foto.ruta}" data-id='${foto.id}' alt="" />
             </a>
             `;
 
@@ -532,16 +531,38 @@ const cerrarGaleria = () => {
     document.body.style.overflow = '';
 };
 
+const slideClick = (e) => {
+
+    let ruta, nombre, descripcion;
+
+    const id = parseInt(e.target.dataset.id);
+    const galeria = document.getElementById('galeria');
+    const categoriaActiva = galeria.dataset.categoria;
+
+    datos.fotos[categoriaActiva].map(foto => {
+        if (foto.id === id) {
+            ruta = foto.ruta;
+            nombre = foto.nombre;
+            descripcion = foto.descripcion;
+
+        }
+
+        cargarImagen(id, nombre, ruta, descripcion);
+    });
+};
+
 const galeria = document.getElementById('galeria');
 
 
 galeria.addEventListener('click', e => {
     const boton = e.target.closest('button');
 
-    if (boton.dataset.accion === 'cerrar-galeria') {
-
+    if (boton?.dataset?.accion === 'cerrar-galeria') {
         cerrarGaleria();
-
     }
-    console.log(e.target.dataset.id);
+
+    if (e.target.dataset.id) {
+        slideClick(e);
+    }
+
 });
