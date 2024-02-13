@@ -474,26 +474,26 @@ categorias.map(categoria => {
     contenedorCategorias$1.append(nuevaCategoria);
 });
 
-const galeria$3 = document.getElementById('galeria');
+const galeria$4 = document.getElementById('galeria');
 
 const cargarImagen = (id, nombre, ruta, descripcion) => {
 
-    galeria$3.querySelector('.galeria__imagen').src = ruta;
-    galeria$3.querySelector('.galeria__imagen').dataset.idImagen = id;
-    galeria$3.querySelector('.galeria__titulo').innerText = nombre;
-    galeria$3.querySelector('.galeria__descripcion-imagen-activa').innerText = descripcion;
+    galeria$4.querySelector('.galeria__imagen').src = ruta;
+    galeria$4.querySelector('.galeria__imagen').dataset.idImagen = id;
+    galeria$4.querySelector('.galeria__titulo').innerText = nombre;
+    galeria$4.querySelector('.galeria__descripcion-imagen-activa').innerText = descripcion;
 
-    const categoriaActual = galeria$3.dataset.categoria;
+    const categoriaActual = galeria$4.dataset.categoria;
     const fotos = datos.fotos[categoriaActual];
     let indexImagenActual;
     fotos.map((foto, index) => {
         if (foto.id === id) { indexImagenActual = index; }    });
 
 
-    if (galeria$3.querySelectorAll('.galeria__carousel-slide').length > 0) {
+    if (galeria$4.querySelectorAll('.galeria__carousel-slide').length > 0) {
         // eliminar las clase active 
-        galeria$3.querySelector('.galeria__carousel-slide--active').classList.remove('galeria__carousel-slide--active');
-        galeria$3.querySelectorAll('.galeria__carousel-slide')[indexImagenActual].classList.add('galeria__carousel-slide--active');
+        galeria$4.querySelector('.galeria__carousel-slide--active').classList.remove('galeria__carousel-slide--active');
+        galeria$4.querySelectorAll('.galeria__carousel-slide')[indexImagenActual].classList.add('galeria__carousel-slide--active');
 
     }
 
@@ -501,9 +501,9 @@ const cargarImagen = (id, nombre, ruta, descripcion) => {
 
 const cargarAnteriorSiguiente = direccion => {
 
-    const categoriaActual = galeria$3.dataset.categoria;
+    const categoriaActual = galeria$4.dataset.categoria;
     const fotos = datos.fotos[categoriaActual];
-    const idImagenActual = parseInt(galeria$3.querySelector('.galeria__imagen').dataset.idImagen);
+    const idImagenActual = parseInt(galeria$4.querySelector('.galeria__imagen').dataset.idImagen);
 
     let indexIamgenAcual;
     fotos.map((foto, index) => {
@@ -528,7 +528,7 @@ const cargarAnteriorSiguiente = direccion => {
 };
 
 const contenedorCategorias = document.getElementById('categorias');
-const galeria$2 = document.getElementById('galeria');
+const galeria$3 = document.getElementById('galeria');
 
 contenedorCategorias.addEventListener('click', e => {
 
@@ -536,14 +536,14 @@ contenedorCategorias.addEventListener('click', e => {
 
     if (e.target.closest('a')) {
 
-        galeria$2.classList.add('galeria--active');
+        galeria$3.classList.add('galeria--active');
 
         document.body.style.overflow = 'hidden';
 
         const categotiaActiva = e.target.closest('a').dataset.categoria;
-        galeria$2.dataset.categoria = categotiaActiva;
+        galeria$3.dataset.categoria = categotiaActiva;
         const fotos = datos.fotos[categotiaActiva];
-        const carusel = galeria$2.querySelector('.galeria__carousel-slides');
+        const carusel = galeria$3.querySelector('.galeria__carousel-slides');
         const { id, nombre, ruta, descripcion } = fotos[0];
 
         cargarImagen(id, nombre, ruta, descripcion);
@@ -558,11 +558,61 @@ contenedorCategorias.addEventListener('click', e => {
             </a>
             `;
 
-            galeria$2.querySelector('.galeria__carousel-slides').innerHTML += slide;
+            galeria$3.querySelector('.galeria__carousel-slides').innerHTML += slide;
         });
-        galeria$2.querySelector('.galeria__carousel-slide').classList.add('galeria__carousel-slide--active');
+        galeria$3.querySelector('.galeria__carousel-slide').classList.add('galeria__carousel-slide--active');
     }
 });
+
+const galeria$2 = document.getElementById('galeria');
+
+const obsiones = {
+    root: document.querySelector('.galeria__carousel'),
+    rootMargin: '0px',
+    threshold: 0.9,
+};
+
+const carousel = direccion => {
+    const observer = new IntersectionObserver(entry => {
+
+        const slideVisible = entry.filter(entrada => {
+            if (entrada.isIntersecting === true) {
+                return entrada;
+            }
+        });
+
+        if (direccion === 'atras') {
+            const primerSlideVisble = slideVisible[0];
+            const indexPirmerSlideVisible = entry.indexOf(primerSlideVisble);
+            if (indexPirmerSlideVisible >= 1) {
+                entry[indexPirmerSlideVisible - 1].target.scrollIntoView({
+                    behavior: 'smooth',
+                    inline: 'start'
+                });
+            }
+        } else if (direccion === 'adelante') {
+            const ultimoSlideVisible = slideVisible[slideVisible.length - 1];
+            const indexUltimoSlideVisible = entry.indexOf(ultimoSlideVisible);
+            if (entry.length - 1 > indexUltimoSlideVisible) {
+
+                entry[indexUltimoSlideVisible + 1].target.scrollIntoView({
+                    behavior: 'smooth',
+                    inline: 'start'
+                });
+            }
+        }
+
+        slides.forEach(slide => {
+            observer.unobserve(slide);
+        });
+    }, obsiones);
+
+    const slides = galeria$2.querySelectorAll('.galeria__carousel-slide');
+
+    slides.forEach(slide => {
+        observer.observe(slide);
+    });
+};
 
 const galeria$1 = document.getElementById('galeria');
 
@@ -616,9 +666,13 @@ galeria.addEventListener('click', e => {
         cargarAnteriorSiguiente('anterior');
     }
 
-    if (boton?.dataset?.accion === 'siguiente-slide') ;
+    if (boton?.dataset?.accion === 'siguiente-slide') {
+        carousel('adelante');
+    }
 
-    if (boton?.dataset?.accion === 'anterior-slide') ;
+    if (boton?.dataset?.accion === 'anterior-slide') {
+        carousel('atras');
+    }
 
 
 
