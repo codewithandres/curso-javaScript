@@ -483,6 +483,20 @@ const cargarImagen = (id, nombre, ruta, descripcion) => {
     galeria$3.querySelector('.galeria__titulo').innerText = nombre;
     galeria$3.querySelector('.galeria__descripcion-imagen-activa').innerText = descripcion;
 
+    const categoriaActual = galeria$3.dataset.categoria;
+    const fotos = datos.fotos[categoriaActual];
+    let indexImagenActual;
+    fotos.map((foto, index) => {
+        if (foto.id === id) { indexImagenActual = index; }    });
+
+
+    if (galeria$3.querySelectorAll('.galeria__carousel-slide').length > 0) {
+        // eliminar las clase active 
+        galeria$3.querySelector('.galeria__carousel-slide--active').classList.remove('galeria__carousel-slide--active');
+        galeria$3.querySelectorAll('.galeria__carousel-slide')[indexImagenActual].classList.add('galeria__carousel-slide--active');
+
+    }
+
 };
 
 const contenedorCategorias = document.getElementById('categorias');
@@ -518,7 +532,7 @@ contenedorCategorias.addEventListener('click', e => {
 
             galeria$2.querySelector('.galeria__carousel-slides').innerHTML += slide;
         });
-        galeria$2.querySelector('.galeria__carousel-slide').classList.add('galeria__carousel-slides--active');
+        galeria$2.querySelector('.galeria__carousel-slide').classList.add('galeria__carousel-slide--active');
     }
 });
 
@@ -540,6 +554,7 @@ const slideClick = (e) => {
     const categoriaActiva = galeria.dataset.categoria;
 
     datos.fotos[categoriaActiva].map(foto => {
+
         if (foto.id === id) {
             ruta = foto.ruta;
             nombre = foto.nombre;

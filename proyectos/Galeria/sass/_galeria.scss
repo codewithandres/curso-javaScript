@@ -91,6 +91,7 @@
 	&__carousel-adelante {
 		display: flex;
 		align-items: center;
+
 		&--active {
 			display: flex;
 		}
@@ -113,8 +114,13 @@
 			border: 1px solid #fff;
 		}
 	}
+
 	&__carousel-image {
 		max-height: 100px;
 		vertical-align: top;
 	}
+}
+
+.galeria--activa {
+	border: 1px solid #fff;
 }
